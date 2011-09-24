@@ -13,4 +13,141 @@ rubyでファイルのダウンロード
 rubyでzipの解凍
 rubyでフォルダ名の変更
 
-●下書き
+●exerb
+Exerb - Exerbへようこそ
+http://exerb.sourceforge.jp/man/README.ja.html#0301
+動かない……。
+
+●スクレイピング
+▼https://github.com/hpricot/hpricot
+gem install hpricot
+
+▼Load
+require 'open-uri'
+doc = open("http://qwantz.com/") { |f| Hpricot(f) }
+
+▼search
+doc.search("//p[@class='posted']")
+
+(doc/"p.posted")
+
+(doc/"#elementID").first.inner_html
+
+▼取得データ "div#search_result_list table tr
+{elem <tr> "\r\n\n" {elem <td class="work_1col_thumb"> {elem <div class="work_thumb"> "\n" {elem <a href="http://www.dlsite.com/maniax/work/=/product_id/RJ083993.html" id="_link_RJ083993"> "\n" {emptyelem <img title="豺ｫ螂ｳﾃ苓＊螂ｳ笘・蟆・ｲｾ [繧ｫ繧ｸ繝上Λ繧ｨ繝]" src="http://img.dlsite.jp/modpub/images2/work/doujin/RJ084000/RJ083993_img_sam.jpg" alt="豺ｫ螂ｳﾃ苓＊螂ｳ笘・蟆・ｲｾ [繧ｫ繧ｸ繝上Λ繧ｨ繝]">} "\n" </a>} "\n" </div>} "\n" </td>} "\n\n" {elem <td> "\n" {elem <dl class="work_1col"> "\n\n" {elem <dt class="work_name"> "\n" {elem <a href="http://www.dlsite.com/maniax/work/=/product_id/RJ083993.html"> "\n\346\267\253\345\245\263\303\227\350\201\226\345\245\263\342\230\205W\345\260\204\347\262\276" </a>} </dt>} "\n\n" {elem <dd class="maker_name"> "\n" {elem <a href="http://www.dlsite.com/maniax/circle/profile/=/maker_id/RG04969.html"> "\n\343\202\253\343\202\270\343\203\217\343\203\251\343\202\250\343\203\240\n" </a>} </dd>} "\n\n" {elem <dd class="work_price"> "945\345\206\206" {elem <span> "/\343\203\235\343\202\244\343\203\263\343\203\2103%" </span>} </dd>} "\n\n\n" {elem <dd class="work_text"> "\345\267\246\350\200\263\343\201\257\346\267\253\345\245\263\343\200\201\343\202\265\343\202\255\343\203\245\343\203\220\343\202\271\343\200\202\345\217\263\350\200\263\343\201\257\350\201\226\345\245\263\343\200\201\343\203\236\343\203\252\343\202\242\343\200\202\345\267\246\350\200\263\343\201\257\346\267\253\343\202\211\343\201\253\343\201\202\343\201\252\343\201\237\343\202\222\350\252\230\343\201\204\343\200\201\345\217\263\350\200\263\343\201\257\346\270\205\343\202\211\343\201\213\343\201\253\343\201\202\343\201\252\343\201\237\343\202\222\350\253\253\343\202\201\343\200\201\347\231\272\345\260\204\343\201\270\343\201\250\343\200\201\350\252\230\343\201\206\343\200\202\342\200\246\344\272\214\344\272\272\343\201\256\347\233\270\345\217\215\343\201\231\343\202\213\345\202\254\347\234\240\343\203\234\343\202\244\343\202\271\343\201\214\350\262\264\346\226\271\343\202\222\346\203\221\343\202\217\343\201\231!" </dd>} "\n\n" {elem <dd class="work_genre"> "\n" {elem <span title="謌蝉ｺｺ蜷代￠" class="icon_ADL"> "\346\210\220\344\272\272\345\220\221\343\201\221" </span>} "\n" {elem <span title="蜷御ｺｺ繧ｽ繝輔ヨ" class="icon_SOF"> "\345\220\214\344\272\272\343\202\275\343\203\225\343\203\210" </span>} {elem <span title="髻ｳ螢ｰ菴懷刀" class="icon_SOU"> "\351\237\263\345\243\260\344\275\234\345\223\201" </span>} "\n" {elem <span title="繧ｪ繝ｼ繝・ぅ繧ｪ(MP3)繝輔ぃ繧､繝ｫ" class="icon_MP3"> "\343\202\252\343\203\274\343\203\207\343\202\243\343\202\252(MP3)\343\203\225\343\202\241\343\202\244\343\203\253" </span>} "\n" {elem <span title="髻ｳ螢ｰ縺ゅｊ" class="icon_SND"> "\351\237\263\345\243\260\343\201\202\343\202\212" </span>} {elem <span title="菴馴ｨ鍋沿縺ゅｊ" class="icon_TRI"> "\344\275\223\351\250\223\347\211\210\343\201\202\343\202\212" </span>} "\n" {emptyelem <input name="__product_attributes" class="__product_attributes" id="_RJ083993" value="RG04969,SND,TRI,068,135,142,152,157" type="hidden" disabled="disabled">} "\n" </dd>} "\n\n" </dl>} "\n" </td>} "\n\n" {elem <td class="work_1col_right"> "\n" {elem <ul> "\n\n" {elem <li class="sales_date"> "\350\262\251\345\243\262\346\227\245:&nbsp;2011\345\271\26409\346\234\21024\346\227\245" </li>} "\n\n" {elem <li class="work_dl"> {elem <div class="_work_dl_RJ083993"> "DL&nbsp;:&nbsp;" {elem <span class="_dl_count_RJ083993"> "14" </span>} </div>} </li>} "\n\n" {elem <li class="work_rankin"> "\n" {elem <table cellspacing="0"> {elem <tbody> {elem <tr> {elem <td title="" class="_crown_total_RJ083993"> "&nbsp;" </td>} {elem <td title="" class="_crown_year_RJ083993"> "&nbsp;" </td>} {elem <td title="" class="_crown_month_RJ083993"> "&nbsp;" </td>} {elem <td title="" class="_crown_week_RJ083993"> "&nbsp;" </td>} {elem <td title="" class="_crown_hour_RJ083993"> "&nbsp;" </td>} </tr>} </tbody>} </table>} "\n" </li>} "\n\n\n\n" </ul>} "\n" </td>} "\n\r\n" </tr>}
+
+
+{elem <tr> {elem <td title="" class="_crown_total_RJ083993"> "&nbsp;" </td>} {elem <td title="" class="_crown_year_RJ083993"> "&nbsp;" </td>} {elem <td title="" class="_crown_month_RJ083993"> "&nbsp;" </td>} {elem <td title="" class="_crown_week_RJ083993"> "&nbsp;" </td>} {elem <td title="" class="_crown_hour_RJ083993"> "&nbsp;" </td>} </tr>}
+
+
+{elem <tr> "\r\n" {elem <td colspan="3"> "\r\n" {elem <p class="similar_link clearfix"> {elem <a href="http://www.dlsite.com/maniax/simura/images/=/id/RJ083993" class="slideOpen_similar _sim_hat" id="RJ083993"> "\344\274\274\343\201\237\347\224\273\345\203\217\343\202\222\346\216\242\343\201\231" </a>} </p>} "\r\n" {emptyelem <div class="similar_list_box _sim_detail" style="display: none;">} "\r\n" </td>} "\r\n" </tr>}
+
+
+{elem <tr> "\r\n" {elem <td colspan="3"> "\r\n" {emptyelem <hr class="work_border">} "\r\n" </td>} "\r\n" </tr>}
+
+
+●フォーマット
+整形ツール http://u670.com/pikamap/html_seikei.php
+
+▼個別ページの体験版ダウンロード部分
+<div class="trial_download clearfix">
+<p class="trial_file">
+<a href="http://trial.dlsite.com/doujin/RJ084000/RJ083875_trial.zip">
+</p>
+</div>
+
+<div class="trial_download clearfix">
+<p class="demo_file">
+<a href="http://trial.dlsite.com/professional/VJ007000/VJ006152_trial_mov.zip">
+</p>
+</div>
+
+
+▼ソース
+<div id="search_result_list">
+<table cellspacing="0" class="work_1col_table">
+<tbody>
+<tr>
+<td class="work_1col_thumb">
+<div class="work_thumb">
+	<a id="_link_RJ082181" href="http://www.dlsite.com/maniax/work/=/product_id/RJ082181.html">
+	<img title="もしも幼馴染が 官能小説家だったら [R&amp;W]" alt="もしも幼馴染が 官能小説家だったら [R&amp;W]" src="http://img.dlsite.jp/modpub/images2/work/doujin/RJ083000/RJ082181_img_sam.jpg">
+	</a>
+</div>
+</td>
+<td>
+	<dl class="work_1col">
+		<dt class="work_name">
+			<a href="http://www.dlsite.com/maniax/work/=/product_id/RJ082181.html">もしも幼馴染が 官能小説家だったら</a> <!-- タイトル -->
+		</dt>
+		<dd class="maker_name">
+			<a href="http://www.dlsite.com/maniax/circle/profile/=/maker_id/RG14605.html">R&amp;W</a>  <!-- メーカー -->
+		</dd>
+		<dd class="work_price">630円
+			<span>/ポイント3%</span>
+		</dd>
+		<dd class="work_text">幼馴染があなたに隠していた一面&#8213;&#8213;それは新気鋭の官能小説家ということだった。</dd>
+		<dd class="work_genre">
+			<span title="成人向け" class="icon_ADL">成人向け</span>
+			<span title="同人ソフト" class="icon_SOF">同人ソフト</span>
+			<span title="音声作品" class="icon_SOU">音声作品</span>
+			<span title="オーディオ(MP3)ファイル" class="icon_MP3">オーディオ(MP3)ファイル</span>
+			<span title="音声あり" class="icon_SND">音声あり</span>
+			<span title="体験版あり" class="icon_TRI">体験版あり</span>
+			<a href="http://www.dlsite.com/maniax/work/reviewlist/=/product_id/RJ082181">
+				<span title="レビューあり" class="icon_REV">レビューあり</span>
+			</a>
+		<input type="hidden" disabled="disabled" value="RG14605,SND,TRI,REV,059,065,222,008,013,114" id="_RJ082181" name="__product_attributes" class="__product_attributes">
+		</dd>
+	</dl>
+</td>
+<td class="work_1col_right">
+	<ul>
+		<li class="sales_date">販売日:&nbsp;2011年08月19日</li> <!-- 発売日 -->
+		<li class="work_dl">
+		<div class="_work_dl_RJ082181">DL&nbsp;:&nbsp;
+			<span class="_dl_count_RJ082181">46</span>
+		</div>
+		</li>
+		<li class="work_rankin">
+		<table cellspacing="0">
+		<tbody>
+		<tr>
+			<td title="" class="_crown_total_RJ082181">&nbsp;</td>
+			<td title="" class="_crown_year_RJ082181">&nbsp;</td>
+			<td title="" class="_crown_month_RJ082181">&nbsp;</td>
+			<td title="" class="_crown_week_RJ082181">&nbsp;</td>
+			<td title="" class="_crown_hour_RJ082181">&nbsp;</td>
+		</tr>
+		</tbody>
+		</table>
+		</li>
+		<li class="work_hyouka_4">
+		<div title="評価4">(26)
+		</div>
+		</li>
+		<li class="work_review">
+			<span class="work_to_review">
+			<div title="レビューあり">(
+				<a href="http://www.dlsite.com/maniax/work/reviewlist/=/product_id/RJ082181.html">1</a>)
+			</div>
+			</span>
+		</li>
+	</ul>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+	<p class="similar_link clearfix">
+		<a id="RJ082181" class="slideOpen_similar _sim_hat" href="http://www.dlsite.com/maniax/simura/images/=/id/RJ082181">似た画像を探す</a>
+	</p>
+<div style="display: none;" class="similar_list_box _sim_detail">
+</div>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<hr class="work_border">
+</td>
+</tr>
+<tr>
