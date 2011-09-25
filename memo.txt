@@ -3,16 +3,113 @@
 1419->
 
 ●やること
-zipのダウンロード
-zipの解凍
+zipのダウンロード 1419->1446(27m)
+zipの解凍 1446->
 ディレクトリ名の変更
 zipの削除
 ダウンロード情報の保存
 yamlの読み込み
 
-●zipのダウンロード
-▼
+●zipの解凍
+▼gemの更新
+rubygems update の罠 - kurainの壺
+http://d.hatena.ne.jp/r_kurain/20090725/1248523753
+ $ sudo gem install rubygems-update -v 1.3.1
+ $ sudo update_rubygems 
+ 動いたー！
+ 
+▼インストール
+:: Winにziprubyのインストールしたいけどできないとき… | BLOG do AtsuSacaqui ::
+http://atsu23.jugem.jp/?eid=701
+  http://rubyforge.org/frs/?group_id=6124&release_id=42436
+  gem install zipruby-0.3.6-x86-mswin32.gem
+    成功→うそ
 
+C:/RailsInstaller/Ruby1.8.7/lib/ruby/site_ruby/1.8/rubygems.rb:926:in `report_activate_error': RubyGem version error: zipruby(0.3.6 not >= 0) (Gem::LoadError)
+	from C:/RailsInstaller/Ruby1.8.7/lib/ruby/site_ruby/1.8/rubygems.rb:244:in `activate_dep'g
+	from C:/RailsInstaller/Ruby1.8.7/lib/ruby/site_ruby/1.8/rubygems.rb:236:in `activate'
+	from C:/RailsInstaller/Ruby1.8.7/lib/ruby/site_ruby/1.8/rubygems.rb:213:in `try_activate'
+	from C:/RailsInstaller/Ruby1.8.7/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:56:in `require'
+	from D:/ruby/dlsite_trial_crawler/dlsite_trial_crawler.rb:7
+	
+▼gem install zipruby
+https://bitbucket.org/winebarrel/zip-ruby/wiki/Home
+gem install zipruby
+  失敗
+
+require 'zipruby'
+
+Zip::Archive.open('filename.zip') do |ar|
+  n = ar.num_files # number of entries
+
+  n.times do |i|
+    entry_name = ar.get_name(i) # get entry name from archive
+
+    # open entry
+    ar.fopen(entry_name) do |f| # or ar.fopen(i) do |f|
+      name = f.name           # name of the file
+      size = f.size           # size of file (uncompressed)
+      comp_size = f.comp_size # size of file (compressed)
+
+      content = f.read # read entry content
+    end
+  end
+
+  # Zip::Archive includes Enumerable
+  entry_names = ar.map do |f|
+    f.name
+  end
+end
+
+▼RubyでZIPの解凍 : mwSoft blog
+http://blog.mwsoft.jp/article/29440541.html
+require 'rubygems'
+require 'zipruby'
+require 'open-uri'
+
+# 取得するURL
+url = ARGV[0]
+
+# ZIPファイルを取得・解凍し、ファイル名とコンテンツを取得
+content = nil
+fileName = nil
+open(url) do | zipFile |
+  Zip::Archive.open_buffer(zipFile.read) do | ar |
+    ar.fopen(ar.get_name(0)) do | file |
+      fileName = file.name
+      content = file.read
+    end
+  end
+end
+
+▼Ruby/rubyでzip圧縮・解凍 - 俺の基地
+http://yakinikunotare.boo.jp/orebase/index.php?Ruby%2Fruby%A4%C7zip%B0%B5%BD%CC%A1%A6%B2%F2%C5%E0
+require 'zipruby'
+require 'fileutils'
+
+def ore_unzip(src_path, output_path)
+  output_path = (output_path + "/").sub("//", "/")
+  Zip::Archive.open(src_path) do |archives|
+    archives.each do |a|
+      d = File.dirname(a.name)
+      FileUtils.makedirs(output_path + d)
+      unless a.directory?
+        File.open(a.name, "w+b") do |f|
+          f.print(a.read)
+        end
+      end
+    end
+  end
+end
+
+ore_unzip("hoge.zip", ".")
+
+●zipのダウンロード
+▼URLからファイル名の取得
+URI.parse('http://yahoo.co.jp/index.html')
+File::basename('http://yahoo.co.jp/index.html')
+  http://www.namaraii.com/rubytips/?%A5%D5%A5%A1%A5%A4%A5%EB%A5%A2%A5%AF%A5%BB%A5%B9#l21
+ 
 ▼Ruby/ファイルをダウンロードする - 俺の基地
 http://yakinikunotare.boo.jp/orebase/index.php?Ruby%2F%A5%D5%A5%A1%A5%A4%A5%EB%A4%F2%A5%C0%A5%A6%A5%F3%A5%ED%A1%BC%A5%C9%A4%B9%A4%EB
 require 'open-uri'

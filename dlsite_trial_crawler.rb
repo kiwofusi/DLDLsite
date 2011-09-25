@@ -1,9 +1,12 @@
 require 'date'
 require 'open-uri'
 require 'kconv'
+require 'fileutils'
 
 require 'rubygems'
 require 'hpricot'
+require 'zipruby'
+#require 'C:/RailsInstaller/Ruby1.8.7/lib/ruby/gems/1.8/gems/zipruby-0.3.6-x86-mswin32/lib/i386-mswin32/zipruby.so'
 
 
 			
@@ -14,40 +17,53 @@ class Item # 商品
 	end
 	def validate() # 商品ならselfを、そうでないときはnilを返す
 		return nil unless contains_item_info?()
-		@item_url = @block.search("dt.work_name a").first["href"]
+		@url = @block.search("dt.work_name a").first["href"]
 		@id = @block.search("dt.work_name a").first["href"].match(/product_id\/([\w]+)/)[1] # first...
-		@title = escape(@block.search("dt.work_name a").inner_html)
-		@maker = escape(@block.search("dd.maker_name a").inner_html)
+		@title = dir_escape(@block.search("dt.work_name a").inner_html)
+		@maker = dir_escape(@block.search("dd.maker_name a").inner_html)
 		@release = DateTime.strptime(@block.search("li.sales_date").inner_html.match(/(\d+)年(\d+)月(\d+)日/)[1..3].join("-"), '%Y-%m-%d')
-		@local_archive = ""
-		@local_folder = "./download/"
+		@archive_file = ""
+		@download_dir = "./download/"
 		return self
 	end
 	
 	def download()
 		return nil unless has_trial?
 		trial_url = "" # e.g. http://www.dlsite.com/maniax/work/=/product_id/RJ083875.html => http://trial.dlsite.com/doujin/RJ084000/RJ083993_trial.zip
-		page = Hpricot(open(@item_url))
+		page = Hpricot(open(@url))
 		page.search("div.trial_download a").each do |a|
-			puts @local_archive = File::basename(a["href"])
-			open(a["href"]) do |archive|
-				open(@local_folder + @local_archive, "w+b") do |f|
-					f.print archive.read
+			puts @archive_file = File::basename(a["href"])
+			open(a["href"]) do |ar|
+				open(@download_dir + @archive_file, "w+b") do |f|
+					f.print ar.read
 				end
 			end
-			extract()
+			decompress()
 		end
 	end
 	
-	def extract() # あとで
-		@local_archive # 解凍する
-		@local_folder = nil
-		add_item_name_to_folder()
-		@local_archive if true # 圧縮ファイルを削除する
+	def decompress()
+		puts "  解凍開始".tosjis
+		@decompress_dir = @download_dir + dir_escape(@id + " " + @title) + "/"
+		Zip::Archive.open(@download_dir + @archive_file) do |archives| # 解凍する
+			FileUtils.makedirs(@decompress_dir)
+			archives.each do |ar|
+				new_dir = @decompress_dir + File::dirname(file_escape(ar.name))
+				FileUtils.makedirs(new_dir)
+				unless ar.directory?
+					output = @decompress_dir + file_escape(ar.name)
+					open(output, "w+b") do |output|
+						output.print ar.read
+					end
+				end
+			end
+		end
+		File::delete(@download_dir + @archive_file) if true # 圧縮ファイルを削除する
+		puts "  おｋ".tosjis
 	end
 
-	def has_downloaded?()
-		if false # ダウンロードパスにitem_idを含むフォルダがある
+	def downloaded?()
+		if Dir::glob(@download_dir + @id + " *").size > 0 # ダウンロードパスにIDを含むフォルダがある（フォルダ名のカスタマイズ未対応）
 			return true
 		else
 			return false
@@ -64,8 +80,13 @@ class Item # 商品
 	
 	private
 
-	def escape(str) # パス名に使えない文字をエスケープする
-		return str.gsub(/\n/, "")
+	def file_escape(str) # ファイル名はそのまま使える
+		return str.tosjis
+	end
+	def dir_escape(str) # 「タイトル」に含まれる禁止文字をエスケープする
+		# /\:*?"<>|{} http://support.microsoft.com/kb/903301/ja
+		return str.gsub(/\n/, "").gsub(/\//, "／").gsub(/\\/, "￥").gsub(/:/, "：").gsub(/\*/, "＊").gsub(/\?/, "？").gsub(/"/, "''").gsub(/</, "＜").gsub(/>/, "＞").gsub(/\|/, "｜").tosjis # 文字化け /([―|ソ|噂|欺|圭|構|蚕|十|申|貼|能|表|暴|予|禄|兔])/ http://www.nishishi.com/blog/2006/02/garbled_charact.html
+		# .gsub(/([―|ソ|噂|欺|圭|構|蚕|十|申|貼|能|表|暴|予|禄|兔])/, "\\1")
 	rescue => e
 		puts e, e.backtrace
 	end
@@ -77,12 +98,6 @@ class Item # 商品
 			return false
 		end
 	end
-	
-	def add_item_name_to_folder()
-		local_folder_path = "" # @local_folder のパス
-		new_name = local_folder_path + " " + @title
-	end
-
 end
 
 class Crawler
@@ -129,10 +144,10 @@ class Crawler
 		i = 0
 		item_list.each do |block|
 			if item = Item.new(block).validate
-				next if item.has_downloaded? # スキップ
+				next if item.downloaded? # スキップ
 				item.download
 			end
-			break if i > 10 || !(i+=1)
+			break if i > 100 || !(i+=1)
 		end
 	end
 
@@ -147,6 +162,7 @@ begin
 	
 	Crawler.new(url).crawl()
 
+	pust "全部おわた。"
 rescue => e
 	puts e, e.backtrace
 end
