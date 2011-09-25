@@ -1,3 +1,62 @@
+■2011-09-25
+●dlsite体験版クローラ
+1419->
+
+●やること
+zipのダウンロード
+zipの解凍
+ディレクトリ名の変更
+zipの削除
+ダウンロード情報の保存
+yamlの読み込み
+
+●zipのダウンロード
+▼
+
+▼Ruby/ファイルをダウンロードする - 俺の基地
+http://yakinikunotare.boo.jp/orebase/index.php?Ruby%2F%A5%D5%A5%A1%A5%A4%A5%EB%A4%F2%A5%C0%A5%A6%A5%F3%A5%ED%A1%BC%A5%C9%A4%B9%A4%EB
+require 'open-uri'
+require "kconv"
+open(Kconv::tosjis("保存先ファイルパス"), "wb") do |output|
+  open("ダウンロード元URL") do |data|
+    output.write(data.read)
+  end
+end
+
+▼RubyでWeb上にあるファイルをダウンロードする: Computer Practice
+http://cpractice.seesaa.net/article/131014359.html
+require 'open-uri'
+
+def usage
+  prog = __FILE__
+  puts "Usage: #{prog} <URL>"
+  exit 1
+end
+
+url = ARGV.shift
+usage unless url
+
+filename = url.split(/\//).last
+
+open(url) do |source|
+  open(filename, "w+b") do |o|
+    o.print source.read
+  end
+end
+
+▼Net/HTTPで圧縮ファイルをダウンロードしよう。
+http://doruby.kbmj.com/tajimemo/20080728/Net_HTTP_
+ require 'net/http'
+
+ Net::HTTP.version_1_2
+
+     File.open([ファイル名],"wb") do |f|
+       Net::HTTP.start([ドメイン名], 80){|http|
+       f.print http.get([対象のファイルまでパス]).body
+     }
+     end 
+
+
 ■2011-09-24
 ●dlsite体験版クローラ
 dlsiteの検索ページのURLを与える

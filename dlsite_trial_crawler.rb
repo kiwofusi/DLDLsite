@@ -16,25 +16,26 @@ class Item # 商品
 		return nil unless contains_item_info?()
 		@item_url = @block.search("dt.work_name a").first["href"]
 		@id = @block.search("dt.work_name a").first["href"].match(/product_id\/([\w]+)/)[1] # first...
-		puts @id
 		@title = escape(@block.search("dt.work_name a").inner_html)
 		@maker = escape(@block.search("dd.maker_name a").inner_html)
 		@release = DateTime.strptime(@block.search("li.sales_date").inner_html.match(/(\d+)年(\d+)月(\d+)日/)[1..3].join("-"), '%Y-%m-%d')
-		@local_archive = nil
-		@local_folder = nil
+		@local_archive = ""
+		@local_folder = "./download/"
 		return self
 	end
 	
 	def download()
-		if has_trial?
-			trial_url = "" # e.g. http://www.dlsite.com/maniax/work/=/product_id/RJ083875.html => http://trial.dlsite.com/doujin/RJ084000/RJ083993_trial.zip
-			page = Hpricot(open(@item_url))
-			page.search("div.trial_download a").each do |a|
-				a["href"]
-				# ダウンロードする
-				@local_archive = nil # ダウンロードしたファイル
-				extract()
+		return nil unless has_trial?
+		trial_url = "" # e.g. http://www.dlsite.com/maniax/work/=/product_id/RJ083875.html => http://trial.dlsite.com/doujin/RJ084000/RJ083993_trial.zip
+		page = Hpricot(open(@item_url))
+		page.search("div.trial_download a").each do |a|
+			puts @local_archive = File::basename(a["href"])
+			open(a["href"]) do |archive|
+				open(@local_folder + @local_archive, "w+b") do |f|
+					f.print archive.read
+				end
 			end
+			extract()
 		end
 	end
 	
@@ -54,7 +55,7 @@ class Item # 商品
 	end
 
 	def has_trial?()
-		if false # 体験版アイコンが含まれる
+		if true # 体験版アイコンが含まれる
 			return true
 		else
 			return false
@@ -129,8 +130,9 @@ class Crawler
 		item_list.each do |block|
 			if item = Item.new(block).validate
 				next if item.has_downloaded? # スキップ
+				item.download
 			end
-			break if i > 2 || !(i+=1)
+			break if i > 10 || !(i+=1)
 		end
 	end
 
