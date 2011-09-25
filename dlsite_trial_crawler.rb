@@ -152,12 +152,12 @@ end
 begin
 	Dir::chdir(File.dirname(__FILE__)) # カレントディレクトリをソースファイルの場所にする cf. http://d.hatena.ne.jp/kasei_san/20090210/p1 http://d.hatena.ne.jp/yasuoy017/20091124
 	
-	url = "http://www.dlsite.com/maniax/fsr/=/language/jp/sex_category/male/ana_flg/off/age_category%5B0%5D/general/age_category%5B1%5D/r15/age_category%5B2%5D/adult/work_category%5B0%5D/doujin/order%5B0%5D/release_d/work_type%5B0%5D/SOU/work_type_name%5B0%5D/%C2%B2%C2%BB%3C%C2%BA%C3%AE%C3%89%C3%8A/genre_and_or/or/options_and_or/or/per_page/100/show_type/n/"
+	url = "http://www.dlsite.com/maniax/fsr/=/language/jp/sex_category/male/ana_flg/off/age_category%5B0%5D/general/work_category%5B0%5D/doujin/order%5B0%5D/release_d/genre_and_or/or/options_and_or/or/per_page/100/show_type/n/from/fs.detail"
 	url = ARGV[0] || url
 	
 	Crawler.new(url).crawl()
 
-	pust "全部おわた。"
+	puts "全部おわた。"
 rescue => e
 	puts e, e.backtrace
 end
