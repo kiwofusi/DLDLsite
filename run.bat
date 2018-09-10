@@ -1,1 +1,0 @@
-ruby dlsite_trial_crawler.rb
