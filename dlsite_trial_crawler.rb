@@ -85,6 +85,7 @@ class Item # 商品
 	
 	def contains_item_info?()
 	  return (@block["href"] \
+	  	&& @block["class"] != "work_thumb_inner" \
 	    && @block["href"].match("/work/=/product_id/") \
 	  	&& @block.inner_text.size > 2)
 	end
