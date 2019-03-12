@@ -9,7 +9,7 @@ begin # require
 
 	require 'rubygems'
 	require 'hpricot'
-	require 'zipruby'
+	require 'zip'
 rescue LoadError => e
 	puts e, e.backtrace
 end
@@ -45,16 +45,14 @@ class Item # 商品
 	def decompress()
 		print "  decompressing...".tosjis
 		@decompress_dir = @download_dir + dir_escape(@id + " " + @title) + "/"
-		Zip::Archive.open(@download_dir + @archive_file) do |archives| # 解凍する
+		Zip::File.open(@download_dir + @archive_file) do |archives| # 解凍する
 			FileUtils.makedirs(@decompress_dir)
 			archives.each do |ar|
 				new_dir = @decompress_dir + File::dirname(file_escape(ar.name))
 				FileUtils.makedirs(new_dir)
 				unless ar.directory?
-					output = @decompress_dir + file_escape(ar.name)
-					open(output, "w+b") do |output|
-						output.print ar.read
-					end
+					new_dir = @decompress_dir + file_escape(ar.name)
+					archives.extract(ar, new_dir) { true }
 				end
 			end
 		end
